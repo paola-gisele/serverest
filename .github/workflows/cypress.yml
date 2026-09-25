@@ -47,6 +47,7 @@ jobs:
       - name: Run API Tests
         run: npm run cy:run:tags
         env:
+          TEST_ENV: production
           GREP_TAGS: ${{ steps.api_tags.outputs.grep_tags }}
 
       - name: Upload API Test Report
@@ -91,6 +92,7 @@ jobs:
       - name: Run Frontend E2E Tests
         run: npm run cy:run:tags -- --browser chrome
         env:
+          TEST_ENV: production
           GREP_TAGS: ${{ steps.frontend_tags.outputs.grep_tags }}
 
       - name: Upload Frontend Test Report

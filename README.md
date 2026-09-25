@@ -4,10 +4,12 @@ End-to-end and API test automation project for the [ServeRest](https://serverest
 
 ## Application under test
 
-| Layer | URL |
-|-------|-----|
-| Frontend | https://front.serverest.dev |
-| API (Swagger) | https://serverest.dev |
+| Environment | Frontend (`BASE_URL`) | API (`API_URL`) |
+|-------------|-----------------------|-----------------|
+| Production (default) | https://front.serverest.dev | https://serverest.dev |
+| Local | http://localhost:3001 | http://localhost:3000 |
+
+URLs are loaded from `.env.${TEST_ENV}` (see `.env.example`). `TEST_ENV` defaults to `production`.
 
 ## Tech stack
 
@@ -88,10 +90,33 @@ cypress/
 npm install
 ```
 
+Copy `.env.example` and adjust if you run against a local ServeRest instance:
+
+```bash
+cp .env.example .env.local
+```
+
 ### Run all tests (headless)
+
+Uses production by default:
 
 ```bash
 npm test
+```
+
+### Run against a specific environment
+
+```bash
+# Production
+npm run cy:run:prod
+npm run cy:open:prod
+
+# Local (requires ServeRest running locally)
+npm run cy:run:local
+npm run cy:open:local
+
+# Or set TEST_ENV on any script
+TEST_ENV=local npm test
 ```
 
 ### Run frontend tests only
@@ -108,7 +133,7 @@ npm run cy:run:api
 
 ### Run tests by tag
 
-Tests are tagged for flexible filtering in CI/CD pipelines:
+Tests are tagged for flexible filtering in CI/CD pipelines. Combine `GREP_TAGS` with `TEST_ENV` (`production` by default, or `local`).
 
 **Type tags:** `@api` or `@frontend`  
 **Feature tags:** `@login`, `@products`, `@users`, `@home`, `@registration`
@@ -116,10 +141,10 @@ Tests are tagged for flexible filtering in CI/CD pipelines:
 **OR mode** (run if ANY tag matches) — use `|`:
 
 ```bash
-# Run all API tests
+# Run all API tests (production)
 GREP_TAGS="@api" npm run cy:run:tags
 
-# Run all frontend tests
+# Run all frontend tests (production)
 GREP_TAGS="@frontend" npm run cy:run:tags
 
 # Run tests with @api OR @login
@@ -134,6 +159,17 @@ GREP_TAGS="@api,@login" npm run cy:run:tags
 
 # Run ONLY frontend products tests
 GREP_TAGS="@frontend,@products" npm run cy:run:tags
+```
+
+**Tags + environment**
+
+```bash
+# Local ServeRest
+TEST_ENV=local GREP_TAGS="@api" npm run cy:run:tags
+TEST_ENV=local GREP_TAGS="@frontend,@login" npm run cy:run:tags
+
+# Production (explicit)
+TEST_ENV=production GREP_TAGS="@api,@login" npm run cy:run:tags
 ```
 
 See [TAGS.md](TAGS.md) for complete tag reference and CI/CD examples.

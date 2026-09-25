@@ -1,10 +1,17 @@
+const path = require('path')
 const { defineConfig } = require('cypress')
+require('dotenv').config({
+  path: path.resolve(__dirname, `.env.${process.env.TEST_ENV || 'production'}`),
+})
+
+const DEFAULT_BASE_URL = 'https://front.serverest.dev'
+const DEFAULT_API_URL = 'https://serverest.dev'
 
 module.exports = defineConfig({
   e2e: {
-    baseUrl: 'https://front.serverest.dev',
+    baseUrl: process.env.BASE_URL || DEFAULT_BASE_URL,
     env: {
-      apiUrl: 'https://serverest.dev',
+      apiUrl: process.env.API_URL || DEFAULT_API_URL,
       grepTags: process.env.GREP_TAGS || '',
     },
     specPattern: 'cypress/e2e/**/*.cy.js',

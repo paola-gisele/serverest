@@ -22,6 +22,8 @@ Tests are organized with dual tags: type + feature.
 
 ## Running Tests with Tags
 
+Use `GREP_TAGS` with `npm run cy:run:tags`. Without `TEST_ENV`, the run uses **production** (`.env.production`). Set `TEST_ENV=local` to use `.env.local`.
+
 ### By Type
 ```bash
 # Run all API tests
@@ -58,6 +60,19 @@ GREP_TAGS="@api,@login" npm run cy:run:tags
 
 # Run ONLY frontend products tests (must have both @frontend AND @products)
 GREP_TAGS="@frontend,@products" npm run cy:run:tags
+```
+
+### Tags + environment
+```bash
+# Local (requires ServeRest running locally)
+TEST_ENV=local GREP_TAGS="@api" npm run cy:run:tags
+TEST_ENV=local GREP_TAGS="@frontend" npm run cy:run:tags
+TEST_ENV=local GREP_TAGS="@api,@login" npm run cy:run:tags
+TEST_ENV=local GREP_TAGS="@frontend,@products" npm run cy:run:tags
+
+# Production (explicit; same as omitting TEST_ENV)
+TEST_ENV=production GREP_TAGS="@api" npm run cy:run:tags
+TEST_ENV=production GREP_TAGS="@frontend,@login" npm run cy:run:tags
 ```
 
 ## CI/CD Pipeline Behavior

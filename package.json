@@ -8,10 +8,15 @@
     "cy:run:frontend": "cypress run --spec 'cypress/e2e/frontend/**/*.cy.js'",
     "cy:run:api": "cypress run --spec 'cypress/e2e/api/**/*.cy.js'",
     "cy:run:tags": "node scripts/grep-tags.js",
-    "cy:open": "cypress open"
+    "cy:open": "cypress open",
+    "cy:run:prod": "TEST_ENV=production cypress run",
+    "cy:open:prod": "TEST_ENV=production cypress open",
+    "cy:run:local": "TEST_ENV=local cypress run",
+    "cy:open:local": "TEST_ENV=local cypress open"
   },
   "devDependencies": {
     "cypress": "^13.15.0",
-    "cypress-mochawesome-reporter": "^3.8.2"
+    "cypress-mochawesome-reporter": "^3.8.2",
+    "dotenv": "^16.4.5"
   }
 }
